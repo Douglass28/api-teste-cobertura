@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Api-com-teste-de-cobertura.iml" filepath="$PROJECT_DIR$/.idea/Api-com-teste-de-cobertura.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api-cobertura-teste/api-cobertura-teste.iml" filepath="$PROJECT_DIR$/api-cobertura-teste/api-cobertura-teste.iml" />
+    </modules>
+  </component>
+</project>
