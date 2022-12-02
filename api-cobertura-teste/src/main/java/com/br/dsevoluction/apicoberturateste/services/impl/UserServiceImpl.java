@@ -1,9 +1,11 @@
 package com.br.dsevoluction.apicoberturateste.services.impl;
 
 import com.br.dsevoluction.apicoberturateste.entities.User;
+import com.br.dsevoluction.apicoberturateste.entities.dtos.UserDto;
 import com.br.dsevoluction.apicoberturateste.repositories.UserRepository;
 import com.br.dsevoluction.apicoberturateste.services.UserService;
 import com.br.dsevoluction.apicoberturateste.services.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public User findById(Integer id) {
         Optional<User> user = repository.findById(id);
@@ -27,4 +32,11 @@ public class UserServiceImpl implements UserService {
         List<User> users = repository.findAll();
         return users;
     }
+
+    @Override
+    public User insertUser(UserDto obj) {
+        return repository.save(mapper.map(obj, User.class));
+    }
+
+
 }
