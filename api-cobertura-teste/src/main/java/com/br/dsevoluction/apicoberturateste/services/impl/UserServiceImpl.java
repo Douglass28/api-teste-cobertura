@@ -49,6 +49,12 @@ public class UserServiceImpl implements UserService {
         return Optional.of(obj);
     }
 
+    @Override
+    public void deleteByid(Integer id) {
+        findById(id);
+        repository.deleteById(id);
+    }
+
     private void update(User user, UserDto obj){
         user.setEmail(obj.getEmail());
         user.setName(obj.getName());

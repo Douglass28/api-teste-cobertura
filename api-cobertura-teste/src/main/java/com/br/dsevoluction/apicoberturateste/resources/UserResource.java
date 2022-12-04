@@ -5,6 +5,7 @@ import com.br.dsevoluction.apicoberturateste.entities.dtos.UserDto;
 import com.br.dsevoluction.apicoberturateste.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/users")
 public class UserResource {
 
+    public static final String ID = "/{id}";
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -41,9 +43,15 @@ public class UserResource {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UserDto> update(@PathVariable Integer id, @RequestBody UserDto obj){
         service.updateUser(id, obj);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @DeleteMapping(value = ID)
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id){
+        service.deleteByid(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

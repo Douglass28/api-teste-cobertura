@@ -14,4 +14,6 @@ public interface UserService {
     User insertUser(UserDto obj);
 
     Optional<User> updateUser(Integer id, UserDto userDto);
+
+    void deleteByid(Integer id);
 }
