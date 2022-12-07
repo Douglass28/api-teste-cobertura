@@ -41,24 +41,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> updateUser(Integer id, UserDto userDto) {
-        findByEmail(userDto);
-        User obj = repository.findById(id).get();
-        update(obj, userDto);
-        repository.save(obj);
-        return Optional.of(obj);
+    public User updateUser(UserDto obj) {
+        return repository.save(mapper.map(obj, User.class));
     }
+
 
     @Override
     public void deleteByid(Integer id) {
         findById(id);
         repository.deleteById(id);
-    }
-
-    private void update(User user, UserDto obj){
-        user.setEmail(obj.getEmail());
-        user.setName(obj.getName());
-        user.setPassword(obj.getPassword());
     }
 
     private void findByEmail(UserDto obj){

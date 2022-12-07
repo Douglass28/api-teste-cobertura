@@ -45,8 +45,9 @@ public class UserResource {
 
     @PutMapping(value = ID)
     public ResponseEntity<UserDto> update(@PathVariable Integer id, @RequestBody UserDto obj){
-        service.updateUser(id, obj);
-        return ResponseEntity.ok().body(obj);
+        obj.setId(id);
+        User newObj = service.updateUser(obj);
+        return ResponseEntity.ok().body(mapper.map(newObj, UserDto.class));
     }
 
     @DeleteMapping(value = ID)

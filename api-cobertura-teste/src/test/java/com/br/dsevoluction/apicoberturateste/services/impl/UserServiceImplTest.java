@@ -29,6 +29,7 @@ class UserServiceImplTest {
     public static final String EMAIL = "douglas@gmail.com";
     public static final String PASSWORD = "123";
     public static final int INDEX = 0;
+    public static final String EMAIL_JA_EXISTE_NO_SISTEMA = "email já existe no sistema";
     @InjectMocks
     private UserServiceImpl service;
     @Mock
@@ -105,6 +106,7 @@ class UserServiceImplTest {
     }
     @Test
     void WhenCreateThenReturnAnDataIntegratyViolationException(){
+        //cenario de falha
         when(repository.findByEmail(anyString())).thenReturn(optionalUser);
 
         try {
@@ -112,14 +114,26 @@ class UserServiceImplTest {
             service.insertUser(userDto);
         } catch (Exception ex){
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
-            assertEquals("email já existe no sistema", ex.getMessage());
+            assertEquals(EMAIL_JA_EXISTE_NO_SISTEMA, ex.getMessage());
         }
     }
 
     @Test
-    void updateUser() {
-    }
+    void WhenUpdateThenReturnSucess() {
+        //cenario de sucesso
+        when(repository.save(any())).thenReturn(user);
 
+        User response = service.updateUser(userDto);
+
+        assertNotNull(response);
+
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+
+    }
     @Test
     void deleteByid() {
     }
@@ -130,3 +144,4 @@ class UserServiceImplTest {
         optionalUser = Optional.of(new User(ID, NAME, EMAIL, PASSWORD));
     }
 }
+
