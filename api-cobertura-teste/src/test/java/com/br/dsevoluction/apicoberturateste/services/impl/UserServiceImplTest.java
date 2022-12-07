@@ -134,6 +134,20 @@ class UserServiceImplTest {
         assertEquals(PASSWORD, response.getPassword());
 
     }
+
+    @Test
+    void WhenUpdateThenReturnAnDataIntegratyViolationException(){
+        //cenario de falha
+        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2);
+            service.insertUser(userDto);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals(EMAIL_JA_EXISTE_NO_SISTEMA, ex.getMessage());
+        }
+    }
     @Test
     void deleteByid() {
     }
