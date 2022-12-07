@@ -52,7 +52,7 @@ public class UserResource {
 
     @DeleteMapping(value = ID)
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id){
-        service.deleteByid(id);
+        service.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
