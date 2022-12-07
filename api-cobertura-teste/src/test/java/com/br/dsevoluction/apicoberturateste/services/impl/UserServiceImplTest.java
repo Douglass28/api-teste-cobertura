@@ -30,6 +30,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123";
     public static final int INDEX = 0;
     public static final String EMAIL_JA_EXISTE_NO_SISTEMA = "email já existe no sistema";
+    public static final String USUARIO_NAO_ENCONTRADO = "usuario nao encontrado";
     @InjectMocks
     private UserServiceImpl service;
     @Mock
@@ -150,12 +151,25 @@ class UserServiceImplTest {
     }
     @Test
     void deleteWithSuccess() {
+        // delete com sucesso
         when(repository.findById(anyInt())).thenReturn(optionalUser);
         doNothing().when(repository).deleteById(anyInt());
 
         service.delete(ID);
         verify(repository, times(1)).deleteById(anyInt());
 
+    }
+
+    @Test
+    void deleteWithObjectNotFoudException(){
+        when(repository.findById(anyInt())).thenThrow(ObjectNotFoundException.class);
+
+        try {
+            repository.deleteById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(USUARIO_NAO_ENCONTRADO, ex.getMessage());
+        }
     }
 
     private void startUser(){
