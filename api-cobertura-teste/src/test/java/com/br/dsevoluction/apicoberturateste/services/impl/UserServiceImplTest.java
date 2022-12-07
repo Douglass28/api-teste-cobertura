@@ -3,6 +3,7 @@ package com.br.dsevoluction.apicoberturateste.services.impl;
 import com.br.dsevoluction.apicoberturateste.entities.User;
 import com.br.dsevoluction.apicoberturateste.entities.dtos.UserDto;
 import com.br.dsevoluction.apicoberturateste.repositories.UserRepository;
+import com.br.dsevoluction.apicoberturateste.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -55,6 +56,18 @@ class UserServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
 
+    }
+
+    @Test
+    void whenFindByIdThenReturnObjectNotFoudException(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("usuario nao encontrado"));
+
+        try {
+            service.findById(ID);
+        }catch (ObjectNotFoundException ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("usuario nao encontrado", ex.getMessage());
+        }
     }
 
     @Test
