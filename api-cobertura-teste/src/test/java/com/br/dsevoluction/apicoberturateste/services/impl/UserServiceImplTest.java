@@ -3,6 +3,7 @@ package com.br.dsevoluction.apicoberturateste.services.impl;
 import com.br.dsevoluction.apicoberturateste.entities.User;
 import com.br.dsevoluction.apicoberturateste.entities.dtos.UserDto;
 import com.br.dsevoluction.apicoberturateste.repositories.UserRepository;
+import com.br.dsevoluction.apicoberturateste.services.exceptions.DataIntegratyViolationException;
 import com.br.dsevoluction.apicoberturateste.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,7 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -90,6 +90,7 @@ class UserServiceImplTest {
 
     @Test
     void WhenCreateThenReturnSucess() {
+        //cenario de sucesso
         when(repository.save(any())).thenReturn(user);
 
         User response = service.insertUser(userDto);
@@ -101,6 +102,18 @@ class UserServiceImplTest {
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
 
+    }
+    @Test
+    void WhenCreateThenReturnAnDataIntegratyViolationException(){
+        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2);
+            service.insertUser(userDto);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals("email já existe no sistema", ex.getMessage());
+        }
     }
 
     @Test
