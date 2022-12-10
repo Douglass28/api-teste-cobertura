@@ -1,5 +1,6 @@
 package com.br.dsevoluction.apicoberturateste.resources.exceptions;
 
+import com.br.dsevoluction.apicoberturateste.services.exceptions.DataIntegratyViolationException;
 import com.br.dsevoluction.apicoberturateste.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ResourceExceptionHandlerTest {
 
-    private static final String OBJTEO_NAO_ENCONTRADO = "objeto_nao_encontrado";
+    private static final String OBJTEO_NAO_ENCONTRADO = "objeto nao encontrado";
+    private static final String EMAIL_JA_EXISTE = "Email ja existe";
 
     @InjectMocks
     private ResourceExceptionHandler exceptionHandler;
@@ -40,7 +42,18 @@ class ResourceExceptionHandlerTest {
     }
 
     @Test
-    void testObjctNotFound() {
+    void dataIntegratyViolationException() {
+
+        ResponseEntity<StandardError> response = exceptionHandler.objctNotFound(
+                new DataIntegratyViolationException(EMAIL_JA_EXISTE), new MockHttpServletRequest());
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals(EMAIL_JA_EXISTE, response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
     }
 
     @Test
