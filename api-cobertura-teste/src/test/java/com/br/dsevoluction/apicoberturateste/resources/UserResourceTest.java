@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -17,8 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -73,6 +73,7 @@ class UserResourceTest {
 
         assertNotNull(response);
         assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(ArrayList.class, response.getBody().getClass());
         assertEquals(UserDto.class, response.getBody().get(INDEX).getClass());
@@ -85,7 +86,16 @@ class UserResourceTest {
     }
 
     @Test
-    void insert() {
+    void whenCreateThenReturnCreated() {
+        when(service.insertUser(any())).thenReturn(user);
+
+        ResponseEntity<UserDto>  response = userResource.insert(userDto);
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getHeaders().get("Location"));
+
+
     }
 
     @Test
